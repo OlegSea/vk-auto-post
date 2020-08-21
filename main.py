@@ -1,8 +1,8 @@
 import vk, json, requests, time, datetime, os, random
-with open("D:/Файлы/Projects/Python/VK/VKAutoPost/settings.json", 'r', encoding="utf-8") as f:
+with open("settings.json", 'r', encoding="utf-8") as f:
     settings = json.load(f)
 
-with open("D:/Файлы/Projects/Python/VK/VKAutoPost/credentials.json", 'r', encoding="utf-8") as f:
+with open("credentials.json", 'r', encoding="utf-8") as f:
     credentials = json.load(f)
 login = credentials['login']
 password = credentials['password']
@@ -21,24 +21,25 @@ def publish (fileName, date):
     try:
         vk_api.wall.post(owner_id= int(settings["groupID"]) * -1 , attachments=attachments, publish_date=int(timeUnix))
     except Exception:
-        print ("Пропустил этот пост")
+        print ("Skipped that one")
 
 d0 = datetime.datetime.strptime(settings["dateStart"], '%d/%m/%Y')
 d1 = datetime.datetime.strptime(settings["dateFinish"], '%d/%m/%Y')
 delta = (d1 - d0)
 count = 0
-i = time.mktime(datetime.datetime.strptime(settings["dateStart"] + " 00:00:00", "%d/%m/%Y %H:%M:%S").timetuple()) + 10800
-while i < time.mktime(datetime.datetime.strptime(settings["dateFinish"] + " 22:00:00", "%d/%m/%Y %H:%M:%S").timetuple()) + 21600:
+i = time.mktime(datetime.datetime.strptime(settings["dateStart"] + " 00:00:00", "%d/%m/%Y %H:%M:%S").timetuple())+ 3600 * int(settings["timeZone"])
+while i < time.mktime(datetime.datetime.strptime(settings["dateFinish"] + " 00:00:00", "%d/%m/%Y %H:%M:%S").timetuple()) + 3600 * int(settings["timeZone"]):
     try:
         fileSelected = random.choice(os.listdir(settings["inputFolder"]))
     except Exception:
-        print ("Файлы кончились!") 
+        print ("No Files!")
         break
     publish(fileSelected, str(datetime.datetime.utcfromtimestamp(i).strftime('%d/%m/%Y %H:%M:%S')))
+    print (str(datetime.datetime.utcfromtimestamp(i).strftime('%d/%m/%Y %H:%M:%S')) + "    " + fileSelected)
     try:
         os.remove(settings["inputFolder"] + fileSelected)
     except Exception:
-        print("Пост на это время уже существует")
+        print("There is a post on that time already")
         break
-    time.sleep(2)
+    time.sleep(int(settings["postDelay"]))
     i += int(float(settings["step"]) * 3600)

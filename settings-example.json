@@ -4,5 +4,7 @@
     "step": "1",
     "inputFolder": "D:/Material/",
 	"groupID": "your_group_id",
-    "appID": "your_app_id"
+    "appID": "your_app_id",
+    "timeZone": "+3",
+    "postDelay": "2"
 }
