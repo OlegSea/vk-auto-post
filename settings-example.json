@@ -1,0 +1,8 @@
+{
+    "dateStart": "01/01/2021",
+    "dateFinish": "02/01/2021",
+    "step": "1",
+    "inputFolder": "D:/Material/",
+	"groupID": "your_group_id",
+    "appID": "your_app_id"
+}
