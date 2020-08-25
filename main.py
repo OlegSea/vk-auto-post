@@ -6,10 +6,13 @@ with open("credentials.json", 'r', encoding="utf-8") as f:
     credentials = json.load(f)
 login = credentials['login']
 password = credentials['password']
-session = vk.AuthSession(settings["appID"], login, password, scope="wall, photos")
+session = vk.AuthSession(settings["appID"], login, password, scope="wall, photos, video")
 vk_api = vk.API(session, v="5.102")
 
-def publish (fileName, date):
+photoExtensions = ["png", "jpg", "gif"]
+videoExtensions = ["mp4"]
+
+def publishPhoto (fileName, date):
     files = {"photo" : open(settings["inputFolder"] + fileName, 'rb')}
 
     uploadServer = vk_api.photos.getWallUploadServer(group_id=settings["groupID"])
@@ -19,7 +22,24 @@ def publish (fileName, date):
     savedPhoto = vk_api.photos.saveWallPhoto(server = uploadedData["server"], hash = uploadedData["hash"], photo = uploadedData["photo"], group_id = settings["groupID"])
     attachments = "photo" + str(savedPhoto[0]["owner_id"]) + "_" + str(savedPhoto[0]["id"])
     try:
-        vk_api.wall.post(owner_id= int(settings["groupID"]) * -1 , attachments=attachments, publish_date=int(timeUnix))
+        if settings["msg"] != "":
+            vk_api.wall.post(owner_id= int(settings["groupID"]) * -1 , attachments=attachments, publish_date=int(timeUnix), message=settings["msg"])
+        else:
+            vk_api.wall.post(owner_id= int(settings["groupID"]) * -1 , attachments=attachments, publish_date=int(timeUnix))
+    except Exception:
+        print ("Skipped that one")
+
+def publishVideo (fileName, date):
+    videoUploadServer = vk_api.video.save(name = settings["videoName"], description = settings["videoDesc"], group_id = settings["groupID"])
+    files = {"video_file" : open(settings["inputFolder"] + fileName, 'rb')}
+    requests.post(videoUploadServer["upload_url"], files = files)
+    timeUnix = time.mktime(datetime.datetime.strptime(date, "%d/%m/%Y %H:%M:%S").timetuple())
+    attachments = "video" + str(videoUploadServer["owner_id"]) + "_" + str(videoUploadServer["video_id"])
+    try:
+        if settings["msg"] != "":
+            vk_api.wall.post(owner_id= int(settings["groupID"]) * -1 , attachments=attachments, publish_date=int(timeUnix), message=settings["msg"])
+        else:
+            vk_api.wall.post(owner_id= int(settings["groupID"]) * -1 , attachments=attachments, publish_date=int(timeUnix))
     except Exception:
         print ("Skipped that one")
 
@@ -34,8 +54,12 @@ while i < time.mktime(datetime.datetime.strptime(settings["dateFinish"] + " 00:0
     except Exception:
         print ("No Files!")
         break
-    publish(fileSelected, str(datetime.datetime.utcfromtimestamp(i).strftime('%d/%m/%Y %H:%M:%S')))
-    print (str(datetime.datetime.utcfromtimestamp(i).strftime('%d/%m/%Y %H:%M:%S')) + "    " + fileSelected)
+    if fileSelected.split('.')[-1] in photoExtensions:
+        publishPhoto(fileSelected, str(datetime.datetime.utcfromtimestamp(i).strftime('%d/%m/%Y %H:%M:%S')))
+        print(str(datetime.datetime.utcfromtimestamp(i).strftime('%d/%m/%Y %H:%M:%S')) + "    " + fileSelected)
+    elif fileSelected.split('.')[-1] in videoExtensions:
+        publishVideo(fileSelected, str(datetime.datetime.utcfromtimestamp(i).strftime('%d/%m/%Y %H:%M:%S')))
+        print(str(datetime.datetime.utcfromtimestamp(i).strftime('%d/%m/%Y %H:%M:%S')) + "    " + fileSelected)
     try:
         os.remove(settings["inputFolder"] + fileSelected)
     except Exception:

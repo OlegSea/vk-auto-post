@@ -6,5 +6,8 @@
 	"groupID": "your_group_id",
     "appID": "your_app_id",
     "timeZone": "+3",
-    "postDelay": "2"
+    "postDelay": "2",
+    "msg": "",
+    "videoName": "Video0",
+    "videoDesc": ""
 }
