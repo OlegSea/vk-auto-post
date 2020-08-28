@@ -10,7 +10,7 @@ Automatically pulls random file from selected folder, then creates a postponed p
 
 # How-To
 
-Surely works on Windows. I didin't tested it on any other platform, but it works theoretically.
+Surely works on Windows and Linux. Didn't tested it on MacOS, but it works theoretically.
 1. Install [Python 3](https://www.python.org/downloads/) if you haven't already.
 2. Clone this repo.
 3. Rename ```credentials-example.json``` to ```credentials.json``` and open it.
