@@ -12,13 +12,14 @@ Automatically pulls random file from selected folder, then creates a postponed p
 
 Surely works on Windows and Linux. Didn't tested it on MacOS, but it works theoretically.
 1. Install [Python 3](https://www.python.org/downloads/) if you haven't already.
-2. Clone this repo.
-3. Rename ```credentials-example.json``` to ```credentials.json``` and open it.
-4. Set your Login and Password.
-5. Rename ```settings-example.json``` to ```settings.json``` and open it.
-6. Change ```groupID``` to your [group ID](https://regvk.com/id/) and ```appID``` to your app ID (you should create standalone one [here](https://vk.com/apps?act=manage)).
-7. Change ```inputFolder``` to your folder.
-8. Run ```main.py``` (you can use command ```python3 path/to/main.py```.
+2. Install VK module (```pip3 install vk```)
+3. Clone this repo.
+4. Rename ```credentials-example.json``` to ```credentials.json``` and open it.
+5. Set your Login and Password.
+6. Rename ```settings-example.json``` to ```settings.json``` and open it.
+7. Change ```groupID``` to your [group ID](https://regvk.com/id/) and ```appID``` to your app ID (you should create standalone one [here](https://vk.com/apps?act=manage)).
+8. Change ```inputFolder``` to your folder.
+9. Run ```main.py``` (you can use command ```python3 path/to/main.py```.
 
 # Settings
 * ```dateStart``` - Day on which the first post will be published (at 0:00).
