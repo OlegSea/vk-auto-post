@@ -1,4 +1,4 @@
-Русский README будет позже
+CAUTION: DOES NOT WORK
 
 # vk-auto-post
 
